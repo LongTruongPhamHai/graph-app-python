@@ -28,11 +28,18 @@ def draw_form():
 
 
 def draw_pos_box(mouse_x, mouse_y):
+    msg = ""
+
     if (mouse_x, mouse_y) == (1000, 1000):
         if config.mode == 0:
             msg = "Enter point name" if config.input_pos == 1 else "Enter point value"
         elif config.mode == 1:
-            msg = "Enter start point" if config.input_pos == 1 else "Enter end point"
+            if config.input_pos == 1:
+                msg = "Enter start point"
+            elif config.input_pos == 2:
+                msg = "Enter end point"
+            elif config.input_pos == 3:
+                msg = "Enter line value"
 
     elif graph_box.collidepoint(mouse_x, mouse_y):
         msg = f"Mouse position: {mouse_x}, {mouse_y}"
@@ -96,6 +103,7 @@ def draw_point_form():
     screen.blit(
         TITLE.render("Value:", True, BLACK), (input_1.left + 115, form.top + 10)
     )
+
     draw_textbox(input_1, config.point_name)
     draw_textbox(input_2, config.point_value)
 
@@ -116,16 +124,25 @@ def draw_point_form():
 
 
 def draw_line_form():
-    screen.blit(TITLE.render("Start:", True, BLACK), (form.left + 15, form.top + 10))
-    screen.blit(TITLE.render("End:", True, BLACK), (input_1.left + 115, form.top + 10))
-
-    if config.start_point != {}:
+    if config.start_point:
+        screen.blit(
+            TITLE.render("Start:", True, BLACK), (form.left + 15, form.top + 10)
+        )
         draw_textbox(input_1, config.start_point["Name"])
 
-    if config.end_point != {}:
+    if config.end_point:
+        screen.blit(
+            TITLE.render("End:", True, BLACK), (input_1.right + 15, form.top + 10)
+        )
         draw_textbox(input_2, config.end_point["Name"])
 
-    if config.start_point != {} and config.end_point != {}:
+    if config.start_point and config.end_point:
+        screen.blit(
+            TITLE.render("Value:", True, BLACK), (input_2.right + 15, form.top + 10)
+        )
+        draw_textbox(input_3, config.line_value)
+
+    if config.start_point and config.end_point and config.line_value:
         pygame.draw.rect(screen, WHITE, submit_btn)
         pygame.draw.rect(screen, BLACK, submit_btn, 1)
         screen.blit(

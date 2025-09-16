@@ -11,7 +11,7 @@ def remake_graph():
         mark_point(p["Name"], p["Position"], p["Value"])
 
     for l in config.line_list:
-        draw_line(l["Start"]["Position"], l["End"]["Position"])
+        draw_line(l["Start"]["Position"], l["End"]["Position"], l["Value"])
 
 
 def reset_form():
@@ -21,6 +21,7 @@ def reset_form():
     config.show_form = False
     config.start_point = {}
     config.end_point = {}
+    config.line_value = ""
 
 
 def save_point():
@@ -39,8 +40,18 @@ def save_point():
 
 def save_line():
     if config.start_point != {} and config.end_point != {}:
-        draw_line(config.start_point["Position"], config.end_point["Position"])
-        config.line_list.append({"Start": config.start_point, "End": config.end_point})
+        draw_line(
+            config.start_point["Position"],
+            config.end_point["Position"],
+            config.line_value,
+        )
+        config.line_list.append(
+            {
+                "Start": config.start_point,
+                "End": config.end_point,
+                "Value": config.line_value,
+            }
+        )
         reset_form()
         remake_graph()
 
@@ -49,30 +60,9 @@ def find_point(x, y):
     for point in config.point_list:
         px, py = point["Position"]
         if px - 10 <= x <= px + 10 and py - 10 <= y <= py + 10:
-            return (px, py)
+            return point
 
-    return ()
-
-    # global start_point, end_point, input_pos
-
-    # draw_form()
-
-    # for point in point_list:
-    #     px, py = point["Position"]
-    #     if px - 10 <= x <= px + 10 and py - 10 <= y <= py + 10:
-    #         if start_point == {}:
-    #             input_pos = 1
-    #             pygame.draw.circle(screen, YELLOW, point["Position"], 10)
-    #             pygame.draw.circle(screen, BLACK, point["Position"], 10, 1)
-    #             start_point = point
-
-    #         else:
-    #             input_pos = 2
-    #             pygame.draw.circle(screen, BLUE, point["Position"], 10)
-    #             pygame.draw.circle(screen, BLACK, point["Position"], 10, 1)
-    #             end_point = point
-
-    #         draw_line_form()
+    return None
 
 
 def print_point_list():
@@ -93,7 +83,17 @@ def mark_point(name, pos, value):
     screen.blit(TEXT.render(name + value, True, BLACK), (pos[0] - 5, pos[1] - 30))
 
 
-def draw_line(start, end):
+def mark_start_point():
+    pygame.draw.circle(screen, YELLOW, config.start_point["Position"], 10)
+    pygame.draw.circle(screen, BLACK, config.start_point["Position"], 10, 1)
+
+
+def mark_end_point():
+    pygame.draw.circle(screen, BLUE, config.end_point["Position"], 10)
+    pygame.draw.circle(screen, BLACK, config.end_point["Position"], 10, 1)
+
+
+def draw_line(start, end, value):
     pygame.draw.line(
         screen,
         BLACK,
@@ -101,3 +101,6 @@ def draw_line(start, end):
         end,
         1,
     )
+    mid_x = (start[0] + end[0]) / 2
+    mid_y = (start[1] + end[1]) / 2
+    screen.blit(TEXT.render(value, True, BLACK), (mid_x + 10, mid_y))
