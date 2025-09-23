@@ -2,6 +2,7 @@ from styles import *
 from elements import *
 from draws import *
 from features import *
+from algorithms import *
 import config
 
 import pygame
@@ -13,8 +14,10 @@ pygame.display.set_caption("Vẽ đồ thị")
 
 draw_form()
 draw_pos_box(0, 0)
+draw_algorithm_box()
 draw_graph_box()
 draw_point_list_box()
+draw_result_box()
 
 pygame.display.flip()
 
@@ -51,11 +54,20 @@ while running:
                 remake_graph()
                 draw_form()
 
+            elif breadth_fs_btn.collidepoint(mx, my):
+                config.show_form = True
+                config.input_pos = 1
+                config.mode = 2
+                draw_pos_box(1000, 1000)
+                draw_form()
+
             elif submit_btn.collidepoint(mx, my):
                 if config.mode == 0:
                     save_point()
                 elif config.mode == 1:
                     save_line()
+                elif config.mode == 2:
+                    breadth_first_search(config.start, config.finish)
 
                 config.show_form = False
                 reset_form()
@@ -124,13 +136,36 @@ while running:
                 if event.key == pygame.K_BACKSPACE:
                     config.line_value = config.line_value[:-1]
 
+            elif config.mode == 2:
+                if config.input_pos == 1:
+                    if event.unicode.isalpha() and len(config.start) < 3:
+                        config.start += event.unicode.upper()
+
+                    if event.key == pygame.K_BACKSPACE:
+                        config.start = config.start[:-1]
+
+                elif config.input_pos == 2:
+                    if event.unicode.isalpha() and len(config.finish) < 3:
+                        config.finish += event.unicode.upper()
+
+                    if event.key == pygame.K_BACKSPACE:
+                        config.finish = config.finish[:-1]
+
             if event.key == pygame.K_RETURN:
                 if config.mode == 0:
                     save_point()
                 elif config.mode == 1:
                     save_line()
+                elif config.mode == 2:
+                    breadth_first_search(config.start, config.finish)
 
-            if event.key == pygame.K_TAB and config.mode == 0:
+                config.show_form = False
+                reset_form()
+                draw_form()
+                remake_graph()
+                draw_pos_box(mx, my)
+
+            if event.key == pygame.K_TAB and (config.mode == 0 or config.mode == 2):
                 config.input_pos = 1 if config.input_pos == 2 else 2
                 draw_pos_box(1000, 1000)
 

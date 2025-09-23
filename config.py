@@ -8,3 +8,4 @@ point_name, point_value, input_pos, mode, current_point, line_value = (
     "",
 )
 start_point, end_point = None, None
+start, finish = "", ""

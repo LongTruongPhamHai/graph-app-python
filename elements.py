@@ -4,13 +4,15 @@ import pygame
 
 pygame.init()
 
-screen = pygame.display.set_mode((1000, 600))
+screen = pygame.display.set_mode((1400, 700))
 
-form = pygame.Rect(-1, -1, 783, 50)
+form = pygame.Rect(-1, -1, 983, 50)
 
-pos_box = pygame.Rect(form.right - 1, -1, 220, 50)
-graph_box = pygame.Rect(1, 50, 780, 549)
-point_list_box = pygame.Rect(graph_box.right, 49, 220, 551)
+pos_box = pygame.Rect(form.right - 1, -1, 420, 50)
+algorithm_box = pygame.Rect(1, 50, 199, 549)
+graph_box = pygame.Rect(algorithm_box.right, 50, 780, 549)
+point_list_box = pygame.Rect(graph_box.right, 49, 420, 551)
+result_box = pygame.Rect(-1, graph_box.bottom + 1, 1200, 100)
 
 input_1 = pygame.Rect(form.left + 105, form.top + 9, 100, 30)
 input_2 = pygame.Rect(input_1.right + 110, form.top + 9, 100, 30)
@@ -26,3 +28,6 @@ def draw_textbox(rect, content):
     pygame.draw.rect(screen, WHITE, rect)
     pygame.draw.rect(screen, BLACK, rect, 1)
     screen.blit(TEXT.render(content, True, BLACK), (rect.left + 10, rect.top + 7))
+
+
+breadth_fs_btn = pygame.Rect(algorithm_box.left + 5, algorithm_box.top + 40, 180, 30)

@@ -2,6 +2,7 @@ from styles import *
 from elements import *
 from draws import *
 from features import *
+import math
 
 
 def remake_graph():
@@ -22,6 +23,8 @@ def reset_form():
     config.start_point = {}
     config.end_point = {}
     config.line_value = ""
+    config.start = ""
+    config.finish = ""
 
 
 def save_point():
@@ -32,6 +35,7 @@ def save_point():
                 "Name": config.point_name,
                 "Position": config.current_point,
                 "Value": config.point_value,
+                "Neighbor": [],
             }
         )
         mark_point(config.point_name, config.current_point, config.point_value)
@@ -45,6 +49,7 @@ def save_line():
             config.end_point["Position"],
             config.line_value,
         )
+
         config.line_list.append(
             {
                 "Start": config.start_point,
@@ -52,6 +57,12 @@ def save_line():
                 "Value": config.line_value,
             }
         )
+
+        for p in config.point_list:
+            if p == config.start_point:
+                p["Neighbor"].append(config.end_point["Name"])
+
+        print_point_list()
         reset_form()
         remake_graph()
 
@@ -65,17 +76,32 @@ def find_point(x, y):
     return None
 
 
+def get_point(name):
+    for p in config.point_list:
+        if p["Name"] == name:
+            return p
+
+
 def print_point_list():
     draw_point_list_box()
 
     y_offset = 40
     for p in config.point_list:
-        result = f"{p['Name']}{p['Value']}"
+        result = f"{p['Name']}{p['Value']}: {p["Neighbor"]}"
         screen.blit(
             TEXT.render(result, True, BLACK),
             (point_list_box.left + 10, point_list_box.top + y_offset),
         )
         y_offset += 20
+
+
+def print_result(result):
+    draw_result_box()
+
+    screen.blit(
+        TEXT.render(str(result), True, BLACK),
+        (result_box.left + 10, result_box.top + 30),
+    )
 
 
 def mark_point(name, pos, value):
@@ -96,11 +122,25 @@ def mark_end_point():
 def draw_line(start, end, value):
     pygame.draw.line(
         screen,
-        BLACK,
+        GREEN,
         start,
         end,
         1,
     )
+    dx, dy = end[0] - start[0], end[1] - start[1]
+    angle = math.atan2(dy, dx)
+
+    left = (
+        end[0] - 20 * math.cos(angle - math.radians(30)),
+        end[1] - 20 * math.sin(angle - math.radians(30)),
+    )
+    right = (
+        end[0] - 20 * math.cos(angle + math.radians(30)),
+        end[1] - 20 * math.sin(angle + math.radians(30)),
+    )
+
+    pygame.draw.polygon(screen, GREEN, [end, left, right])
+
     mid_x = (start[0] + end[0]) / 2
     mid_y = (start[1] + end[1]) / 2
-    screen.blit(TEXT.render(value, True, BLACK), (mid_x + 10, mid_y))
+    screen.blit(TEXT.render(value, True, GREEN), (mid_x + 10, mid_y))

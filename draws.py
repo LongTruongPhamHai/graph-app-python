@@ -26,6 +26,9 @@ def draw_form():
     elif config.mode == 1:
         draw_line_form()
 
+    elif config.mode == 2:
+        draw_search_form()
+
 
 def draw_pos_box(mouse_x, mouse_y):
     msg = ""
@@ -41,6 +44,9 @@ def draw_pos_box(mouse_x, mouse_y):
             elif config.input_pos == 3:
                 msg = "Enter line value"
 
+        elif config.mode == 2:
+            msg = "Enter start point" if config.input_pos == 1 else "Enter finish point"
+
     elif graph_box.collidepoint(mouse_x, mouse_y):
         msg = f"Mouse position: {mouse_x}, {mouse_y}"
 
@@ -50,6 +56,30 @@ def draw_pos_box(mouse_x, mouse_y):
     pygame.draw.rect(screen, LIGHT_GRAY, pos_box)
     pygame.draw.rect(screen, BLACK, pos_box, 1)
     screen.blit(TEXT.render(msg, True, BLACK), (pos_box.left + 10, pos_box.top + 15))
+
+
+def draw_algorithm_box():
+    pygame.draw.rect(screen, LIGHT_GRAY, algorithm_box)
+
+    screen.blit(
+        TITLE.render("ALGORITHMS", True, BLACK),
+        (algorithm_box.left + 3, algorithm_box.top + 5),
+    )
+
+    pygame.draw.line(
+        screen,
+        BLACK,
+        (algorithm_box.right - 2, algorithm_box.top),
+        (algorithm_box.right - 2, algorithm_box.bottom),
+        1,
+    )
+
+    pygame.draw.rect(screen, WHITE, breadth_fs_btn)
+    pygame.draw.rect(screen, BLACK, breadth_fs_btn, 1)
+    screen.blit(
+        TEXT.render("Breadth FS", True, BLACK),
+        (breadth_fs_btn.left + 5, breadth_fs_btn.top + 5),
+    )
 
 
 def draw_graph_box():
@@ -89,7 +119,7 @@ def draw_point_list_box():
         screen,
         BLACK,
         point_list_box.topleft,
-        (point_list_box.left, point_list_box.bottom),
+        point_list_box.bottomleft,
         1,
     )
     screen.blit(
@@ -156,3 +186,68 @@ def draw_line_form():
     screen.blit(
         TEXT.render("Cancel", True, BLACK), (cancel_btn.left + 5, cancel_btn.top + 7)
     )
+
+
+def draw_search_form():
+    screen.blit(TITLE.render("Start:", True, BLACK), (form.left + 15, form.top + 10))
+    screen.blit(
+        TITLE.render("Finish:", True, BLACK), (input_1.left + 115, form.top + 10)
+    )
+
+    draw_textbox(input_1, config.start)
+    draw_textbox(input_2, config.finish)
+
+    if config.start.isalpha() and config.finish.isalpha():
+        pygame.draw.rect(screen, WHITE, submit_btn)
+        pygame.draw.rect(screen, BLACK, submit_btn, 1)
+        screen.blit(
+            TEXT.render("Search", True, BLACK),
+            (submit_btn.left + 5, submit_btn.top + 7),
+        )
+    else:
+        pygame.draw.rect(screen, MEDIUM_GRAY, submit_btn)
+
+    pygame.draw.rect(screen, WHITE, cancel_btn)
+    pygame.draw.rect(screen, BLACK, cancel_btn, 1)
+    screen.blit(
+        TEXT.render("Cancel", True, BLACK), (cancel_btn.left + 5, cancel_btn.top + 7)
+    )
+
+
+def draw_result_box():
+    pygame.draw.rect(screen, WHITE, result_box)
+
+    label = pygame.Rect(result_box.left - 2, result_box.top, 100, 30)
+    pygame.draw.rect(screen, WHITE, label)
+    pygame.draw.rect(screen, BLACK, label, 1)
+    screen.blit(TEXT.render("Result", True, BLACK), (label.left + 5, label.top + 5))
+
+    pygame.draw.line(
+        screen,
+        BLACK,
+        result_box.topleft,
+        result_box.topright,
+        1,
+    )
+
+    # mode_box = pygame.Rect(label.right + 5, graph_box.top - 2, 100, 30)
+    # pygame.draw.rect(screen, WHITE, mode_box)
+    # pygame.draw.rect(screen, BLACK, mode_box, 1)
+    # mode_TEXT = "Draw point" if config.mode == 0 else "Draw line"
+    # screen.blit(
+    #     TEXT.render(mode_TEXT, True, BLACK),
+    #     (mode_box.left + 5, mode_box.top + 5),
+    # )
+
+    # pygame.draw.rect(screen, WHITE, change_btn)
+    # pygame.draw.rect(screen, BLACK, change_btn, 1)
+    # screen.blit(
+    #     TEXT.render("Change mode", True, BLACK),
+    #     (change_btn.left + 5, change_btn.top + 5),
+    # )
+
+    # pygame.draw.rect(screen, WHITE, reset_btn)
+    # pygame.draw.rect(screen, BLACK, reset_btn, 1)
+    # screen.blit(
+    #     TEXT.render("Reset", True, BLACK), (reset_btn.left + 5, reset_btn.top + 5)
+    # )
