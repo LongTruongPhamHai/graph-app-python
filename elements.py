@@ -31,3 +31,4 @@ def draw_textbox(rect, content):
 
 
 breadth_fs_btn = pygame.Rect(algorithm_box.left + 5, algorithm_box.top + 40, 180, 30)
+b_a_b_s_btn = pygame.Rect(algorithm_box.left + 5, breadth_fs_btn.top + 40, 180, 30)

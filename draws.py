@@ -26,7 +26,7 @@ def draw_form():
     elif config.mode == 1:
         draw_line_form()
 
-    elif config.mode == 2:
+    elif config.mode >= 2:
         draw_search_form()
 
 
@@ -44,7 +44,7 @@ def draw_pos_box(mouse_x, mouse_y):
             elif config.input_pos == 3:
                 msg = "Enter line value"
 
-        elif config.mode == 2:
+        elif config.mode >= 2:
             msg = "Enter start point" if config.input_pos == 1 else "Enter finish point"
 
     elif graph_box.collidepoint(mouse_x, mouse_y):
@@ -79,6 +79,13 @@ def draw_algorithm_box():
     screen.blit(
         TEXT.render("Breadth FS", True, BLACK),
         (breadth_fs_btn.left + 5, breadth_fs_btn.top + 5),
+    )
+
+    pygame.draw.rect(screen, WHITE, b_a_b_s_btn)
+    pygame.draw.rect(screen, BLACK, b_a_b_s_btn, 1)
+    screen.blit(
+        TEXT.render("B&B Search", True, BLACK),
+        (b_a_b_s_btn.left + 5, b_a_b_s_btn.top + 5),
     )
 
 

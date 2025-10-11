@@ -61,6 +61,13 @@ while running:
                 draw_pos_box(1000, 1000)
                 draw_form()
 
+            elif b_a_b_s_btn.collidepoint(mx, my):
+                config.show_form = True
+                config.input_pos = 1
+                config.mode = 3
+                draw_pos_box(1000, 1000)
+                draw_form()
+
             elif submit_btn.collidepoint(mx, my):
                 if config.mode == 0:
                     save_point()
@@ -68,6 +75,8 @@ while running:
                     save_line()
                 elif config.mode == 2:
                     breadth_first_search(config.start, config.finish)
+                elif config.mode == 3:
+                    branch_and_bound(config.start, config.finish)
 
                 config.show_form = False
                 reset_form()
@@ -136,7 +145,7 @@ while running:
                 if event.key == pygame.K_BACKSPACE:
                     config.line_value = config.line_value[:-1]
 
-            elif config.mode == 2:
+            elif config.mode >= 2:
                 if config.input_pos == 1:
                     if event.unicode.isalpha() and len(config.start) < 3:
                         config.start += event.unicode.upper()
@@ -158,6 +167,8 @@ while running:
                     save_line()
                 elif config.mode == 2:
                     breadth_first_search(config.start, config.finish)
+                elif config.mode == 3:
+                    branch_and_bound(config.start, config.finish)
 
                 config.show_form = False
                 reset_form()
@@ -165,7 +176,7 @@ while running:
                 remake_graph()
                 draw_pos_box(mx, my)
 
-            if event.key == pygame.K_TAB and (config.mode == 0 or config.mode == 2):
+            if event.key == pygame.K_TAB and (config.mode == 0 or config.mode >= 2):
                 config.input_pos = 1 if config.input_pos == 2 else 2
                 draw_pos_box(1000, 1000)
 

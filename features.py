@@ -12,7 +12,9 @@ def remake_graph():
         mark_point(p["Name"], p["Position"], p["Value"])
 
     for l in config.line_list:
-        draw_line(l["Start"]["Position"], l["End"]["Position"], l["Value"])
+        start = get_point(l["Start"])
+        end = get_point(l["End"])
+        draw_line(start["Position"], end["Position"], l["Value"])
 
 
 def reset_form():
@@ -34,7 +36,7 @@ def save_point():
             {
                 "Name": config.point_name,
                 "Position": config.current_point,
-                "Value": config.point_value,
+                "Value": int(config.point_value),
                 "Neighbor": [],
             }
         )
@@ -52,9 +54,9 @@ def save_line():
 
         config.line_list.append(
             {
-                "Start": config.start_point,
-                "End": config.end_point,
-                "Value": config.line_value,
+                "Start": config.start_point["Name"],
+                "End": config.end_point["Name"],
+                "Value": int(config.line_value),
             }
         )
 
@@ -81,13 +83,23 @@ def get_point(name):
         if p["Name"] == name:
             return p
 
+    return None
+
+
+def get_line_value(start, end):
+    for l in config.line_list:
+        if l["Start"] == start and l["End"] == end:
+            return l["Value"]
+
+    return None
+
 
 def print_point_list():
     draw_point_list_box()
 
     y_offset = 40
     for p in config.point_list:
-        result = f"{p['Name']}{p['Value']}: {p["Neighbor"]}"
+        result = f"{p['Name']}{str(p['Value'])}: {p["Neighbor"]}"
         screen.blit(
             TEXT.render(result, True, BLACK),
             (point_list_box.left + 10, point_list_box.top + y_offset),
@@ -106,7 +118,7 @@ def print_result(result):
 
 def mark_point(name, pos, value):
     pygame.draw.circle(screen, RED, pos, 10)
-    screen.blit(TEXT.render(name + value, True, BLACK), (pos[0] - 5, pos[1] - 30))
+    screen.blit(TEXT.render(name + str(value), True, BLACK), (pos[0] - 5, pos[1] - 30))
 
 
 def mark_start_point():
@@ -143,4 +155,4 @@ def draw_line(start, end, value):
 
     mid_x = (start[0] + end[0]) / 2
     mid_y = (start[1] + end[1]) / 2
-    screen.blit(TEXT.render(value, True, GREEN), (mid_x + 10, mid_y))
+    screen.blit(TEXT.render(str(value), True, GREEN), (mid_x + 10, mid_y))
