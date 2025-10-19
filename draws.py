@@ -88,6 +88,13 @@ def draw_algorithm_box():
         (b_a_b_s_btn.left + 5, b_a_b_s_btn.top + 5),
     )
 
+    pygame.draw.rect(screen, WHITE, hill_s_btn)
+    pygame.draw.rect(screen, BLACK, hill_s_btn, 1)
+    screen.blit(
+        TEXT.render("Hill Climbing Search", True, BLACK),
+        (hill_s_btn.left + 5, hill_s_btn.top + 5),
+    )
+
 
 def draw_graph_box():
     pygame.draw.rect(screen, WHITE, graph_box)
@@ -117,6 +124,12 @@ def draw_graph_box():
     pygame.draw.rect(screen, BLACK, reset_btn, 1)
     screen.blit(
         TEXT.render("Reset", True, BLACK), (reset_btn.left + 5, reset_btn.top + 5)
+    )
+
+    pygame.draw.rect(screen, WHITE, clear_btn)
+    pygame.draw.rect(screen, BLACK, clear_btn, 1)
+    screen.blit(
+        TEXT.render("Clear", True, BLACK), (clear_btn.left + 5, clear_btn.top + 5)
     )
 
 

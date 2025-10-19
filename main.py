@@ -48,6 +48,12 @@ while running:
                 remake_graph()
                 draw_form()
 
+            elif clear_btn.collidepoint(mx, my):
+                reset_form()
+                remake_graph()
+                draw_form()
+                print_result("")
+
             elif cancel_btn.collidepoint(mx, my):
                 config.show_form = False
                 reset_form()
@@ -68,6 +74,14 @@ while running:
                 draw_pos_box(1000, 1000)
                 draw_form()
 
+            elif hill_s_btn.collidepoint(mx, my):
+                config.show_form = True
+                config.input_pos = 1
+                config.mode = 4
+                draw_pos_box(1000, 1000)
+                draw_form()
+                # hill_climbing("A", "B")
+
             elif submit_btn.collidepoint(mx, my):
                 if config.mode == 0:
                     save_point()
@@ -77,11 +91,12 @@ while running:
                     breadth_first_search(config.start, config.finish)
                 elif config.mode == 3:
                     branch_and_bound(config.start, config.finish)
+                elif config.mode == 4:
+                    hill_climbing(config.start, config.finish)
 
                 config.show_form = False
                 reset_form()
                 draw_form()
-                remake_graph()
                 draw_pos_box(mx, my)
 
             elif (
@@ -169,11 +184,12 @@ while running:
                     breadth_first_search(config.start, config.finish)
                 elif config.mode == 3:
                     branch_and_bound(config.start, config.finish)
+                elif config.mode == 4:
+                    hill_climbing(config.start, config.finish)
 
                 config.show_form = False
                 reset_form()
                 draw_form()
-                remake_graph()
                 draw_pos_box(mx, my)
 
             if event.key == pygame.K_TAB and (config.mode == 0 or config.mode >= 2):

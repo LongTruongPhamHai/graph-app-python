@@ -156,3 +156,26 @@ def draw_line(start, end, value):
     mid_x = (start[0] + end[0]) / 2
     mid_y = (start[1] + end[1]) / 2
     screen.blit(TEXT.render(str(value), True, GREEN), (mid_x + 10, mid_y))
+
+
+def draw_route(start, end):
+    pygame.draw.line(
+        screen,
+        YELLOW,
+        start,
+        end,
+        5,
+    )
+    dx, dy = end[0] - start[0], end[1] - start[1]
+    angle = math.atan2(dy, dx)
+
+    left = (
+        end[0] - 20 * math.cos(angle - math.radians(30)),
+        end[1] - 20 * math.sin(angle - math.radians(30)),
+    )
+    right = (
+        end[0] - 20 * math.cos(angle + math.radians(30)),
+        end[1] - 20 * math.sin(angle + math.radians(30)),
+    )
+
+    pygame.draw.polygon(screen, YELLOW, [end, left, right])
